@@ -268,7 +268,7 @@ namespace StockDory
             Move               ttMove  = NoMove;
             bool               ttHit   = false;
 
-            if (ttState.Type != Invalid && ttState.Hash == hash) {
+            if (ttState.Type != Invalid && ttState.Hash == static_cast<TinyZobristHash>(hash)) {
                 ttHit  = true;
                 ttMove = ttState.Move;
 
@@ -333,7 +333,7 @@ namespace StockDory
             const uint8_t historyFactor     = std::max(depth / 3, 1);
 
             SearchState abState {
-                hash,
+                static_cast<TinyZobristHash>(hash),
                 -Infinity,
                 ttMove,
                 static_cast<uint8_t>(depth),
@@ -454,10 +454,11 @@ namespace StockDory
                 const ZobristHash  hash    = Board.Zobrist();
                 const SearchState& ttState = TTable[hash];
 
-                if (ttState.Hash == hash           &&
-                   (ttState.Type == Exact          ||
-                   (ttState.Type == BetaCutoff     && ttState.Evaluation >= beta ) ||
-                   (ttState.Type == AlphaUnchanged && ttState.Evaluation <= alpha) )) return ttState.Evaluation;
+                if (ttState.Hash == static_cast<TinyZobristHash>(hash) &&
+                   (ttState.Type == Exact                              ||
+                   (ttState.Type == BetaCutoff                         && ttState.Evaluation >= beta ) ||
+                   (ttState.Type == AlphaUnchanged                     && ttState.Evaluation <= alpha) ))
+                    return ttState.Evaluation;
             }
             //endregion
 
@@ -586,7 +587,7 @@ namespace StockDory
             // ReSharper disable once CppTooWideScopeInitStatement
             const SearchState& old = TTable[hash];
             if (entry.Type == Exact || entry.Hash != old.Hash ||
-               (old.  Type == AlphaUnchanged &&
+               (old  .Type == AlphaUnchanged &&
                 entry.Type == BetaCutoff   ) ||
                 entry.Depth > old.Depth - ReplacementThreshold)
                 TTable[hash] = entry;

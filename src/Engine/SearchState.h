@@ -22,10 +22,12 @@ namespace StockDory
 
     };
 
+    using TinyZobristHash = uint32_t;
+
     struct SearchState
     {
 
-        ZobristHash     Hash       = 0;
+        TinyZobristHash Hash       = 0;
         int32_t         Evaluation = 0;
         Move            Move       = ::Move();
         uint8_t         Depth      = 0;
