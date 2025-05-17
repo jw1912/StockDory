@@ -268,7 +268,7 @@ namespace StockDory
             Move               ttMove  = NoMove;
             bool               ttHit   = false;
 
-            if (ttState.Type != Invalid && ttState.Hash == static_cast<TinyZobristHash>(hash)) {
+            if (ttState.Type != Invalid && ttState.Hash == Tiny(hash)) {
                 ttHit  = true;
                 ttMove = ttState.Move;
 
@@ -333,7 +333,7 @@ namespace StockDory
             const uint8_t historyFactor     = std::max(depth / 3, 1);
 
             SearchState abState {
-                static_cast<TinyZobristHash>(hash),
+                Tiny(hash),
                 -Infinity,
                 ttMove,
                 static_cast<uint8_t>(depth),
@@ -454,10 +454,10 @@ namespace StockDory
                 const ZobristHash  hash    = Board.Zobrist();
                 const SearchState& ttState = TTable[hash];
 
-                if (ttState.Hash == static_cast<TinyZobristHash>(hash) &&
-                   (ttState.Type == Exact                              ||
-                   (ttState.Type == BetaCutoff                         && ttState.Evaluation >= beta ) ||
-                   (ttState.Type == AlphaUnchanged                     && ttState.Evaluation <= alpha) ))
+                if (ttState.Hash == Tiny(hash)     &&
+                   (ttState.Type == Exact          ||
+                   (ttState.Type == BetaCutoff     && ttState.Evaluation >= beta ) ||
+                   (ttState.Type == AlphaUnchanged && ttState.Evaluation <= alpha) ))
                     return ttState.Evaluation;
             }
             //endregion

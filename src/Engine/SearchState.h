@@ -24,6 +24,11 @@ namespace StockDory
 
     using TinyZobristHash = uint32_t;
 
+    TinyZobristHash Tiny(const ZobristHash hash)
+    {
+        return static_cast<TinyZobristHash>(hash >> 32);
+    }
+
     struct SearchState
     {
 
