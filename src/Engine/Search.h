@@ -233,6 +233,12 @@ namespace StockDory
             if (Pv) SelectiveDepth = std::max(SelectiveDepth, ply);
             //endregion
 
+            const bool checked = Board.Checked<Color>();
+
+            //region Check Extension
+            if (checked) depth += CheckExtension;
+            //endregion
+
             //region Q Jump
             if (depth <= 0) return Q<Color, Pv>(ply, alpha, beta);
             //endregion
@@ -288,7 +294,6 @@ namespace StockDory
             Stack[ply].StaticEvaluation = staticEvaluation;
             //endregion
 
-            const bool checked   = Board.Checked<Color>();
             bool       improving = false;
 
             if (!Pv && !checked) {
@@ -305,10 +310,6 @@ namespace StockDory
 
                 //region Null Move Pruning
                 if (NMP<Color, Root>(ply, depth, staticEvaluation, beta)) return beta;
-                //endregion
-            } else if (checked) {
-                //region Check Extension
-                depth += CheckExtension;
                 //endregion
             }
 
